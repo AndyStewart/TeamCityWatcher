@@ -1,0 +1,40 @@
+extends layout
+
+h1 
+block content
+  div(ng-controller="buildController")
+    div(class="load" ng-class="{Shame: buildInformation.develop.result=='FAILURE'}")
+      div.ShameBackground
+      div.ShameCenter.text-center
+        div
+          h2.text-center Fix the Build!
+            ul.list-inline
+              li.avatar(ng-repeat="change in buildInformation.develop.changes")
+                img(src="http://www.gravatar.com/avatar/{{change.hash}}?s=250") 
+                h2.username {{change.username}}
+    div.row
+      div.col-md-12
+        h1.text-center eSubs
+    div.row(ng-show="buildInformation" ng-animate="{show: 'example-show' }")
+      div#develop(class="col-md-12 ")
+        h2 Build Status
+        div.row.BuildResult(ng-repeat='build in buildInformation' class='{{build.result}}')
+          div.col-md-1
+            div.icon
+            p.Percentage {{build.percentageComplete}}%
+          div.info.col-md-8
+            h2.BuildInfo {{build.name}}
+            p.BuildInfo(ng-show="build.startTime")
+              span Start Time on {{build.startTime | date:'dd-MM-yyyy HH:mm:ss'  }}
+            p.BuildInfo {{build.status}}
+            p.BuildInfo
+              span {{build.defects}}
+          div.col-md-3
+            ul.BuildInfo.text-right
+                li.list-inline.avatar(ng-repeat="change in build.changes")
+                  div.row
+                    div.col-md-12
+                      span.username {{change.username}}
+                      img(src="http://www.gravatar.com/avatar/{{change.hash}}?s=50") 
+    div(class="load" ng-class="{loadInProgress: refreshInProgress==true}")
+      span Loading In Progress
