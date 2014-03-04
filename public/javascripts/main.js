@@ -17,7 +17,7 @@ function parseDefectString(defects) {
 var refreshBuildData = function(data) {
     for (var i = data.length - 1; i >= 0; i--) {
         var buildResults = data[i];
-        buildResults.defects = parseDefectString(buildResults.defects);
+        //buildResults.defects = parseDefectString(buildResults.defects);
     };
    
     return data;

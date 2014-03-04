@@ -20,10 +20,6 @@ body {
     padding: 5px;
 }
 
-.info {
-    padding-left: 50px;
-}
-
 .loadInProgress {
     display: block !important;
 }
@@ -38,6 +34,10 @@ body {
     overflow: hidden;
     height: 170px;
     margin-bottom: 20px;
+}
+
+.BuildResult .row {
+    margin: 2px;
 }
 
 .RUNNING {
@@ -151,25 +151,25 @@ body {
 
 .SUCCESS {
     background-color: #4CD500;
-    background-image: url(/images/tick.png);
+    /*background-image: url(/images/tick.png);*/
     background-repeat: no-repeat;
 }
 
 .WARNING {
     background-color: #ff5500;
-    background-image: url(/images/warning.png);
+    /*background-image: url(/images/warning.png);*/
     background-repeat: no-repeat;
 }
 
 .UNKNOWN {
     background-color: #808080;
-    background-image: url(/images/Pause.png);
+    /*background-image: url(/images/Pause.png);*/
     background-repeat: no-repeat;
 }
 
 .FAILURE {
     background-color: red;
-    background-image: url(/images/cross.png);
+    /*background-image: url(/images/cross.png);*/
     background-repeat: no-repeat;
 }
 
