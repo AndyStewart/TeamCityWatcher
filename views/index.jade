@@ -17,7 +17,6 @@ block content
         h1.text-center eSubs
     div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }")
       div#develop(class="col-md-12 ")
-        h2 Build Status
         div.col-md-2.BuildResult(ng-repeat='build in pipeline')
           div.row(class='{{build.result}}')
             div.col-md-1
@@ -26,6 +25,7 @@ block content
             div.info.col-md-10
               h3.BuildInfo {{build.name}}
               p.BuildInfo {{build.status}}
+              span Started {{build.startTime | date:'dd-MM-yyyy HH:mm:ss'  }}
             //- div.col-md-3
             //-   ul.BuildInfo.text-right
             //-       li.list-inline.avatar(ng-repeat="change in build.changes")
