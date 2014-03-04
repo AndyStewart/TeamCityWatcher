@@ -17,7 +17,7 @@ block content
         h1.text-center eSubs
     div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }")
       div#develop(class="col-md-12 ")
-        div.col-md-2.BuildResult(ng-repeat='build in pipeline')
+        div.col-md-2.BuildResult(ng-repeat='build in pipeline.builds')
           div.row(class='{{build.result}}')
             div.col-md-1
               div.icon
