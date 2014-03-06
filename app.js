@@ -27,16 +27,17 @@ if ('development' == app.get('env')) {
 }
 
 var teamCity = require("./lib/infrastructure/teamcity");
-var BuildMonitor = require("./lib/application/buildmonitor");
+var buildRepository = require("./lib/infrastructure/buildRepository");
+var pipelineRepository = require("./lib/infrastructure/pipelineRepository");
+var buildMonitor = require("./lib/application/buildmonitor2");
 
-var buildMonitor = new BuildMonitor(teamCity);
 
 app.get('/', function(req, res) {
-	res.render('index');
+	res.render('index'); 
 });
 
 app.get('/buildstatus', function(req, res) {
-	buildMonitor.getStatus(function(err, result) {
+	buildMonitor.getPipelines(buildRepository, pipelineRepository, function(err, result) {
 		res.send(result);
 	});
 });
