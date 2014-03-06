@@ -1,7 +1,9 @@
 body {
   padding: 50px;
+  padding-top: 10px;
   color: white;
   background-color: #333;
+  overflow: hidden;
 }
 
 .project {
@@ -33,11 +35,12 @@ body {
 .BuildResult {
     overflow: hidden;
     height: 170px;
-    margin-bottom: 20px;
+    position: relative;
 }
 
 .BuildResult .row {
     margin: 2px;
+    height: 100%;
 }
 
 .RUNNING {
@@ -122,16 +125,18 @@ body {
     animation-duration: 1.5s; 
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-    position: absolute;
-	top: -8px;
-	left: -23px;
-	height: 100px;
-	width: 148px;
 }
 
 .icon {
-    height: 148px;
-	width: 148px;
+        position: absolute;
+    top: -0px;
+    right: 0px;
+    height: 40px;
+    width: 40px;
+
+    height: 40px;
+	width: 40px;
+    background-size: 40px 40px; 
 }
 
 .Percentage {
@@ -139,52 +144,54 @@ body {
 }
 
 .RUNNING .Percentage {
-	display: inline;
+	display: inline-block;
 }
 
 .RUNNING .icon {
-    background-size: 148px 148px;
     background-image: url(/images/refresh.png);
     background-repeat: no-repeat;
-    position: relative;
 }
 
 .SUCCESS {
     background-color: #4CD500;
-    /*background-image: url(/images/tick.png);*/
     background-repeat: no-repeat;
+}
+
+.WARNING .icon {
+    background-image: url(/images/tick.png);
 }
 
 .WARNING {
     background-color: #ff5500;
-    /*background-image: url(/images/warning.png);*/
     background-repeat: no-repeat;
+}
+
+.WARNING .icon {
+    background-image: url(/images/warning.png);
 }
 
 .UNKNOWN {
     background-color: #808080;
-    /*background-image: url(/images/Pause.png);*/
     background-repeat: no-repeat;
+    opacity: 0.5;
+}
+
+.UNKNOWN .icon {
+    background-image: url(/images/Pause.png);
 }
 
 .FAILURE {
     background-color: red;
-    /*background-image: url(/images/cross.png);*/
     background-repeat: no-repeat;
 }
 
+.FAILURE .icon {
+    background-image: url(/images/cross.png);
+}
+
 .Percentage {
-    position: absolute;
-    top: 0px;
-    left: 3px;
-    width: 128px;    
-    height: 128px;    
     font-size: 1.4em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;   
-    text-align: center;
-    vertical-align: middle;
-    line-height: 128px;
-
 }
 
 #SmokeTest .icon {
