@@ -128,15 +128,12 @@ body {
 }
 
 .icon {
-        position: absolute;
-    top: -0px;
+    position: absolute;
     right: 0px;
-    height: 40px;
-    width: 40px;
-
     height: 40px;
 	width: 40px;
     background-size: 40px 40px; 
+    background-position: top right;
 }
 
 .Percentage {
@@ -144,7 +141,7 @@ body {
 }
 
 .RUNNING .Percentage {
-	display: inline-block;
+	display: block;
 }
 
 .RUNNING .icon {
@@ -157,8 +154,9 @@ body {
     background-repeat: no-repeat;
 }
 
-.WARNING .icon {
+.SUCCESS .icon {
     background-image: url(/images/tick.png);
+    background-repeat: no-repeat;
 }
 
 .WARNING {
@@ -176,10 +174,6 @@ body {
     opacity: 0.5;
 }
 
-.UNKNOWN .icon {
-    background-image: url(/images/Pause.png);
-}
-
 .FAILURE {
     background-color: red;
     background-repeat: no-repeat;
@@ -194,13 +188,6 @@ body {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;   
 }
 
-#SmokeTest .icon {
-    height: 40px;
-    width: 40px;
-}
-
-#SmokeTest .WARNING,
-#SmokeTest .UNKNOWN,
-#SmokeTest .SUCCESS {
-    background-size: 40px 40px;
+.showTime {
+    visibility: hidden;
 }

@@ -17,7 +17,7 @@ block content
         h1.text-center eSubs
     div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }")
       div#develop(class="col-md-12 ")
-        h3 {{pipeline.startTime | date:'dd-MM-yyyy HH:mm:ss'  }}
+        h3 Started at {{pipeline.startTime | date:'HH:mm:ss on dd-MM-yyyy '  }}
         ul.BuildInfo.text-right
             li.list-inline.avatar(ng-repeat="change in pipeline.changes")
               div.row
@@ -30,11 +30,12 @@ block content
               div.row
                 div.col-md-12
                   h3.BuildInfo {{build.name}}
-                  p.BuildInfo {{build.status}}
-                  span Started {{build.startTime | date:'dd-MM-yyyy HH:mm:ss'  }}
+                  p.BuildInfo {{build.status}} &nbsp;
+                  span(ng-class="{showTime: !build.startTime}") {{build.startTime | date:'dd-MM-yyyy HH:mm:ss'  }} &nbsp;
               div.row
-                div.col-md-5.Percentage.text-right {{build.percentageComplete}} %
-                div.col-md-7
+                div.col-md-9
+                  div.Percentage.text-right {{build.percentageComplete}} %
+                div.col-md-3
                   div.icon
     div(class="load" ng-class="{loadInProgress: refreshInProgress==true}")
       span Loading In Progress
