@@ -3,15 +3,6 @@ extends layout
 h1 
 block content
   div(ng-controller="buildController")
-    div(class="load" ng-class="{Shame: buildInformation.develop.result=='FAILURE'}")
-      div.ShameBackground
-      div.ShameCenter.text-center
-        div
-          h2.text-center Fix the Build!
-            ul.list-inline
-              li.avatar(ng-repeat="change in buildInformation.develop.changes")
-                img(src="http://www.gravatar.com/avatar/{{change.hash}}?s=250") 
-                h2.username {{change.username}}
     div.row
       div.col-md-12
         h1.text-center eSubs
