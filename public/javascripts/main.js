@@ -31,7 +31,7 @@ function buildController($scope, $http, $timeout, $location) {
                 $scope.buildInformation = refreshBuildData(data);
             } finally {
                 $scope.refreshInProgress = false;
-                //$timeout(refresh, 10000);
+                $timeout(refresh, 10000);
             }
         })
         .error(function () {
