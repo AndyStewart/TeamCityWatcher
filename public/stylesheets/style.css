@@ -1,6 +1,6 @@
 body {
-  padding: 50px;
-  padding-top: 10px;
+  padding: 10px;
+  margin: 0px;
   color: white;
   background-color: #333;
   overflow: hidden;
@@ -26,10 +26,30 @@ body {
     display: block !important;
 }
 
+.Pipeline {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .BuildInfo {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: clip;
+}
+
+.change {
+    overflow: hidden;
+    height: 70px;
+}
+
+.change img {
+    margin: 5px;
+    float: right;
+}
+.change .info {
+    margin: 10px;
+    background-color: #808080;
+    background-repeat: no-repeat;    
 }
 
 .BuildResult {
@@ -38,8 +58,11 @@ body {
     position: relative;
 }
 
+.BuildResult .info {
+    margin: 10px;   
+}
+
 .BuildResult .row {
-    margin: 2px;
     height: 100%;
 }
 
@@ -70,51 +93,6 @@ body {
     text-transform:capitalize;
 }
 
-.Shame {
-    position: fixed;
-    display: block;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;
-    z-index: 99;
-}
-
-.Shame .ShameBackground {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0,0,0,0.75);
-    opacity: 50%;
-    z-index: 101;
-}
-
-
-.ShameCenter {
-    z-index: 199;
-    position: fixed;
-    display: block;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;    
-}
-
-.ShameCenter div {
-    display: inline-block;
-    background-color: red;
-    padding: 20px;
-    margin-top: 100px;
-}
-.avatar
-{
-    margin: 5px;
-}
-
-.avatar span {
-    margin-right: 10px;
-}
-
 .RUNNING .icon {
     -webkit-animation-name: rotate; 
     -webkit-animation-duration: 1.5s; 
@@ -128,9 +106,8 @@ body {
 }
 
 .icon {
-    position: absolute;
     right: 0px;
-    height: 40px;
+    height: 40px; 
 	width: 40px;
     background-size: 40px 40px; 
     background-position: top right;
@@ -168,6 +145,8 @@ body {
     background-image: url(/images/warning.png);
 }
 
+.avatar {
+}
 .UNKNOWN {
     background-color: #808080;
     background-repeat: no-repeat;

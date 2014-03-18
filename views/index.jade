@@ -2,31 +2,42 @@ extends layout
 
 h1 
 block content
-  div(ng-controller="buildController")
+  div.container-fluid(ng-controller="buildController")
     div.row
       div.col-md-12
         h1.text-center eSubs
-    div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }")
-      div#develop(class="col-md-12 ")
-        h3 Started at {{pipeline.startTime | date:'HH:mm:ss on dd-MM-yyyy '  }}
-        ul.BuildInfo.text-right
-            li.list-inline.avatar(ng-repeat="change in pipeline.changes")
-              div.row
-                div.col-md-12
-                  span.username {{change.username}}
-                  img(src="http://www.gravatar.com/avatar/{{change.hash}}?s=50") 
-        div.col-md-2.BuildResult(ng-repeat='build in pipeline.builds')
-          div.row(class='{{build.result}}')
-            div.info.col-md-12
-              div.row
-                div.col-md-12
-                  h3.BuildInfo {{build.name}}
-                  p.BuildInfo {{build.status}} &nbsp;
-                  span(ng-class="{showTime: !build.startTime}") {{build.startTime | date:'dd-MM-yyyy HH:mm:ss'  }} &nbsp;
-              div.row
-                div.col-md-9
-                  div.Percentage.text-right {{build.percentageComplete}} %
-                div.col-md-3
-                  div.icon
+    div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }" class="Pipeline")
+      div.col-md-12
+        h4 {{'#' + pipeline.number}} started at {{pipeline.startTime | date:'HH:mm:ss on dd-MM-yyyy '  }}
+        div.row
+          div.col-md-4.change(ng-repeat="change in pipeline.changes | limitTo:3")
+            div.row
+              div.col-md-12.info
+                div.row
+                  div.col-md-9
+                    div.row
+                      div.col-md-12
+                        strong.username {{change.username}}
+                    div.row
+                      div.col-md-12
+                        small.commit {{change.comment}}
+                  div.col-md-3.text-right
+                    img(src="http://www.gravatar.com/avatar/{{change.hash}}?s=50")
+        div.row
+          div.col-md-2.BuildResult(ng-repeat='build in pipeline.builds')
+            div.row
+              div.col-md-12.info(class='{{build.result}}')
+                div.row
+                  div.col-md-12
+                    h4.BuildInfo {{build.name}}
+                    p.BuildInfo
+                      small {{build.status}} &nbsp;
+                    p.BuildInfo(ng-class="{showTime: !build.startTime}")
+                      small {{build.startTime | date:'dd-MM-yyyy HH:mm:ss'  }} &nbsp;
+                div.row
+                  div.col-md-9
+                    div.Percentage.text-right {{build.percentageComplete}} %
+                  div.col-md-3
+                    div.icon
     div(class="load" ng-class="{loadInProgress: refreshInProgress==true}")
       span Loading In Progress
