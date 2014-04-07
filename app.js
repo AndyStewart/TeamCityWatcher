@@ -36,8 +36,8 @@ app.get('/', function(req, res) {
 	res.render('index'); 
 });
 
-app.get('/buildstatus', function(req, res) {
-	buildMonitor.getPipelines(buildRepository, pipelineRepository, function(err, result) {
+app.get('/buildstatus/:projectName', function(req, res) {
+	buildMonitor.getPipelines(buildRepository, pipelineRepository, req.params.projectName , function(err, result) {
 		res.send(result);
 	});
 });

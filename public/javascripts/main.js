@@ -19,8 +19,13 @@ function buildController($scope, $http, $timeout, $location) {
     }
 
     function refresh() {
+        var projectName =  $location.search().projectname;
+        if (!projectName) {
+            projectName = "eSubs";
+        }
+
         $scope.refreshInProgress = true;
-        $http.get('/buildstatus' + $location.path())
+        $http.get('/buildstatus/' + projectName)
                 .success(updateScreen)
                 .error(waitThenUpdateScreen);
     };
