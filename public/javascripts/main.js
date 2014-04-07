@@ -21,7 +21,7 @@ function buildController($scope, $http, $timeout, $location) {
     function refresh() {
         var projectName =  $location.search().projectname;
         if (!projectName) {
-            projectName = "eSubs";
+            projectName = "E-Subs";
         }
 
         $scope.refreshInProgress = true;
