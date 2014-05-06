@@ -3,7 +3,7 @@ var teamCityMonitor = angular.module('teamCityMonitor', [])
         $locationProvider.html5Mode(true);
     });
 
-function buildController($scope, $http, $timeout, $location) {
+function buildMonitorController($scope, $http, $timeout, $location) {
 
     function updateScreen(data) {
         try {
@@ -15,7 +15,7 @@ function buildController($scope, $http, $timeout, $location) {
     }
 
     function waitThenUpdateScreen() {
-        $timeout(refresh, 10000);
+        //$timeout(refresh, 10000);
     }
 
     function refresh() {
@@ -33,4 +33,24 @@ function buildController($scope, $http, $timeout, $location) {
     refresh();
 }
 
-buildController.$inject = ['$scope', '$http', '$timeout', '$location'];
+buildMonitorController.$inject = ['$scope', '$http', '$timeout', '$location'];
+
+function buildController($scope,  $http, $timeout) {
+
+    function updateScreen(data) {
+        try {
+            $scope.build = data;
+        } finally {
+            $scope.refreshInProgress = false;
+        }
+    }
+
+    function refresh() {
+        if ($scope.build.id) {
+            $http.get('/build/' + $scope.build.id)
+                    .success(updateScreen);
+            $timeout(refresh, 10000);
+        }
+    }
+    refresh();
+}

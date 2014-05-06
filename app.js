@@ -42,6 +42,12 @@ app.get('/buildstatus/:projectName', function(req, res) {
 	});
 });
 
+app.get('/build/:id', function(req, res) {
+	buildRepository.getById(req.params.id, function(error, build){
+		res.send(build);
+	});
+})
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

@@ -2,7 +2,7 @@ extends layout
 
 h1 
 block content
-  div.container-fluid(ng-controller="buildController")
+  div.container-fluid(ng-controller="buildMonitorController")
     div.row
       div.col-md-12
         h1.text-center {{buildInformation[0].name}}
@@ -26,8 +26,8 @@ block content
         div.row
           div.col-md-2.BuildResult(ng-repeat='build in pipeline.builds')
             div.row
-              div.col-md-12.info(class='{{build.result}}')
-                div.row
+              div.col-md-12.info(ng-controller="buildController")
+                div.row(class='{{build.result}}')
                   div.col-md-12
                     h4.BuildInfo {{build.name}}
                     p.BuildInfo
