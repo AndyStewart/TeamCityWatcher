@@ -5,7 +5,7 @@ block content
   div.container-fluid(ng-controller="buildMonitorController")
     div.row
       div.col-md-12
-        h1.text-center {{buildInformation[0].name}}
+        h1.text-center {{projectName}}
     div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }" class="Pipeline")
       div.col-md-12
         h4 {{'#' + pipeline.number}} started at {{pipeline.startTime | date:'HH:mm:ss on dd-MM-yyyy '  }}

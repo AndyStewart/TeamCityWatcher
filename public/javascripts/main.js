@@ -5,6 +5,12 @@ var teamCityMonitor = angular.module('teamCityMonitor', [])
 
 function buildMonitorController($scope, $http, $timeout, $location) {
 
+    var projectName =  $location.search().projectname;
+    if (!projectName) {
+        projectName = "E-Subs";
+    }
+    $scope.projectName = projectName;
+
     function updateScreen(data) {
         try {
             $scope.buildInformation = data;
@@ -15,15 +21,10 @@ function buildMonitorController($scope, $http, $timeout, $location) {
     }
 
     function waitThenUpdateScreen() {
-        //$timeout(refresh, 10000);
+        $timeout(refresh, 20000);
     }
 
     function refresh() {
-        var projectName =  $location.search().projectname;
-        if (!projectName) {
-            projectName = "E-Subs";
-        }
-
         $scope.refreshInProgress = true;
         $http.get('/buildstatus/' + projectName)
                 .success(updateScreen)
@@ -35,7 +36,7 @@ function buildMonitorController($scope, $http, $timeout, $location) {
 
 buildMonitorController.$inject = ['$scope', '$http', '$timeout', '$location'];
 
-function buildController($scope,  $http, $timeout) {
+function buildController($scope, $http, $timeout) {
 
     function updateScreen(data) {
         try {
@@ -47,9 +48,9 @@ function buildController($scope,  $http, $timeout) {
 
     function refresh() {
         if ($scope.build.id) {
-            $http.get('/build/' + $scope.build.id)
-                    .success(updateScreen);
-            $timeout(refresh, 10000);
+            var buildUrl = "/project/" + $scope.projectName + "/build/" + $scope.build.id;
+            $http.get(buildUrl).success(updateScreen);
+            $timeout(refresh, 5000);
         }
     }
     refresh();

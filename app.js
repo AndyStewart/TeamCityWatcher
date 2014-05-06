@@ -36,17 +36,36 @@ app.get('/', function(req, res) {
 	res.render('index'); 
 });
 
+app.get('/project/:projectName', function(req, res){
+	res.send({ projectName: req.params.projectName });
+})
+
+app.get('/project/:projectName/pipelines', function(req, res) {
+	res.send({ projectName: req.params.projectName });
+});
+
+app.get('/project/:projectName/build/:id', function(req, res) {
+	buildRepository.getById(req.params.id, function(error, build){
+		if (build.result === 'FAILURE' || build.result === 'SUCCESS') {
+			res.set('Cache-Control', 'public, max-age=31536000');
+		}
+		res.send(build);
+	});
+})
+
+app.get('/project/:projectName/changes/:id', function(req, res) {
+	buildRepository.getChangesInBuild(req.params.id, function(error, changes){
+		//res.set('Cache-Control', 'public, max-age=31536000');
+		res.send(build);
+	});
+})
+
 app.get('/buildstatus/:projectName', function(req, res) {
 	buildMonitor.getPipelines(buildRepository, pipelineRepository, req.params.projectName , function(err, result) {
 		res.send(result);
 	});
 });
 
-app.get('/build/:id', function(req, res) {
-	buildRepository.getById(req.params.id, function(error, build){
-		res.send(build);
-	});
-})
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
