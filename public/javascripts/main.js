@@ -55,3 +55,10 @@ function buildController($scope, $http, $timeout) {
     }
     refresh();
 }
+
+function changeController($scope, $http) {
+    var buildUrl = "/project/" + $scope.projectName + "/pipelines/" + $scope.pipeline.id + "/changes";
+    $http.get(buildUrl).success(function(data) {
+        $scope.changes = data;
+    });
+}

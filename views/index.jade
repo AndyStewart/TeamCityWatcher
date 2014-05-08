@@ -9,8 +9,8 @@ block content
     div.row(ng-show="buildInformation" ng-repeat='pipeline in buildInformation' ng-animate="{show: 'example-show' }" class="Pipeline")
       div.col-md-12
         h4 {{'#' + pipeline.number}} started at {{pipeline.startTime | date:'HH:mm:ss on dd-MM-yyyy '  }}
-        div.row
-          div.col-md-4.change(ng-repeat="change in pipeline.changes | limitTo:3")
+        div.row(ng-controller="changeController")
+          div.col-md-4.change(ng-repeat="change in changes | limitTo:3")
             div.row
               div.col-md-12.info
                 div.row
