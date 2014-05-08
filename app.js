@@ -41,11 +41,7 @@ app.get('/project/:projectName/pipelines', function(req, res) {
 });
 
 app.get('/project/:projectName/build/:id', function(req, res) {
-	console.log("Build => " + req.params.id);
 	buildRepository.getById(req.params.id, function(error, build){
-		if (error) {
-			res.send(404, error);
-		}
 		if (build.result === 'FAILURE' || build.result === 'SUCCESS') {
 			res.set('Cache-Control', 'public, max-age=31536000');
 		}
@@ -53,7 +49,6 @@ app.get('/project/:projectName/build/:id', function(req, res) {
 	});
 })
 
-// TODO Make the below work
 app.get('/project/:projectName/pipelines/:id/changes', function(req, res) {
 	console.log("Getting changes in pipeline " + req.params.id);
 	buildRepository.getChangesInBuild(req.params.id, function(error, changes){
