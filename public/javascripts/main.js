@@ -4,7 +4,6 @@ var teamCityMonitor = angular.module('teamCityMonitor', [])
     });
 
 function buildMonitorController($scope, $http, $timeout, $location) {
-
     var projectName =  $location.search().projectname;
     if (!projectName) {
         projectName = "E-Subs";
@@ -21,7 +20,7 @@ function buildMonitorController($scope, $http, $timeout, $location) {
     }
 
     function waitThenUpdateScreen() {
-        $timeout(refresh, 20000);
+        $timeout(refresh, 10000);
     }
 
     function refresh() {
@@ -37,23 +36,12 @@ function buildMonitorController($scope, $http, $timeout, $location) {
 buildMonitorController.$inject = ['$scope', '$http', '$timeout', '$location'];
 
 function buildController($scope, $http, $timeout) {
-
-    function updateScreen(data) {
-        try {
+    if ($scope.build.id) {
+        var buildUrl = "/project/" + $scope.projectName + "/build/" + $scope.build.id;
+        $http.get(buildUrl).success(function(data) {
             $scope.build = data;
-        } finally {
-            $scope.refreshInProgress = false;
-        }
+        });
     }
-
-    function refresh() {
-        if ($scope.build.id) {
-            var buildUrl = "/project/" + $scope.projectName + "/build/" + $scope.build.id;
-            $http.get(buildUrl).success(updateScreen);
-            $timeout(refresh, 5000);
-        }
-    }
-    refresh();
 }
 
 function changeController($scope, $http) {

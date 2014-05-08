@@ -3,7 +3,7 @@ body {
   margin: 0px;
   color: white;
   background-color: #333;
- /* overflow: hidden; */
+  overflow: hidden; 
 }
 
 .project {
