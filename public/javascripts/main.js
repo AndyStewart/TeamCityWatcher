@@ -36,6 +36,7 @@ function buildMonitorController($scope, $http, $timeout, $location) {
 buildMonitorController.$inject = ['$scope', '$http', '$timeout', '$location'];
 
 function buildController($scope, $http, $timeout) {
+    $scope.build.result = "UNKNOWN";
     if ($scope.build.id) {
         var buildUrl = "/project/" + $scope.projectName + "/build/" + $scope.build.id;
         $http.get(buildUrl).success(function(data) {

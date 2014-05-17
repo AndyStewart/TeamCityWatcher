@@ -28,7 +28,7 @@ if ('development' == app.get('env')) {
 
 var teamCity = require("./lib/infrastructure/teamcity");
 var buildRepository = require("./lib/infrastructure/buildRepository");
-var pipelineRepository = require("./lib/infrastructure/pipelineRepository");
+var pipelineRepository = require("./lib/infrastructure/pipelineConfigurationRepository");
 var changeRepository = require("./lib/infrastructure/changeRepository");
 var buildMonitor = require("./lib/application/buildmonitor");
 
