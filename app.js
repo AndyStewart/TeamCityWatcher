@@ -29,6 +29,7 @@ if ('development' == app.get('env')) {
 var teamCity = require("./lib/infrastructure/teamcity");
 var buildRepository = require("./lib/infrastructure/buildRepository");
 var pipelineRepository = require("./lib/infrastructure/pipelineRepository");
+var changeRepository = require("./lib/infrastructure/changeRepository");
 var buildMonitor = require("./lib/application/buildmonitor");
 
 
@@ -51,7 +52,7 @@ app.get('/project/:projectName/build/:id', function(req, res) {
 
 app.get('/project/:projectName/pipelines/:id/changes', function(req, res) {
 	console.log("Getting changes in pipeline " + req.params.id);
-	buildRepository.getChangesInBuild(req.params.id, function(error, changes){
+	changeRepository.getChangesInBuild(req.params.id, function(error, changes){
 		res.set('Cache-Control', 'public, max-age=31536000');
 		res.send(changes);
 	});
