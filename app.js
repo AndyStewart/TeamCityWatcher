@@ -32,6 +32,10 @@ var pipelineRepository = require("./lib/infrastructure/pipelineRepository");
 var changeRepository = require("./lib/infrastructure/changeRepository");
 var buildMonitor = require("./lib/application/buildmonitor");
 
+function sendAndCache(res, result) {
+	res.set('Cache-Control', 'public, max-age=31536000');
+	res.send(result);
+}
 
 app.get('/', function(req, res) {
 	res.render('index'); 
@@ -43,18 +47,13 @@ app.get('/project/:projectName/pipelines', function(req, res) {
 
 app.get('/project/:projectName/build/:id', function(req, res) {
 	buildRepository.getById(req.params.id, function(error, build){
-		if (build.result === 'FAILURE' || build.result === 'SUCCESS') {
-			res.set('Cache-Control', 'public, max-age=31536000');
-		}
-		res.send(build);
+		return (build.isComplete) ? sendAndCache(res, build) : res.send(build);
 	});
 })
 
 app.get('/project/:projectName/pipelines/:id/changes', function(req, res) {
-	console.log("Getting changes in pipeline " + req.params.id);
 	changeRepository.getChangesInBuild(req.params.id, function(error, changes){
-		res.set('Cache-Control', 'public, max-age=31536000');
-		res.send(changes);
+		sendAndCache(res, changes);
 	});
 })
 
