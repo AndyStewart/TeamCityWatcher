@@ -33,7 +33,7 @@ var changeRepository = require("./lib/infrastructure/changeRepository");
 var buildMonitor = require("./lib/application/buildmonitor");
 
 function sendAndCache(res, result) {
-	res.set('Cache-Control', 'public, max-age=31536000');
+	//res.set('Cache-Control', 'public, max-age=31536000');
 	res.send(result);
 }
 
