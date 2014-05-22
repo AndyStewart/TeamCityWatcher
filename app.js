@@ -30,7 +30,7 @@ var teamCity = require("./lib/infrastructure/teamcity");
 var buildRepository = require("./lib/infrastructure/buildRepository");
 var pipelineRepository = require("./lib/infrastructure/pipelineConfigurationRepository");
 var changeRepository = require("./lib/infrastructure/changeRepository");
-var buildMonitor = require("./lib/application/buildmonitor");
+var pipelineBuilder = require("./lib/application/pipelineBuilder");
 
 function sendAndCache(res, result) {
 	//res.set('Cache-Control', 'public, max-age=31536000');
@@ -58,7 +58,7 @@ app.get('/project/:projectName/pipelines/:id/changes', function(req, res) {
 })
 
 app.get('/buildstatus/:projectName', function(req, res) {
-	buildMonitor.getPipelines(buildRepository, pipelineRepository, req.params.projectName , function(err, result) {
+	pipelineBuilder.build(buildRepository, pipelineRepository, req.params.projectName , function(err, result) {
 		res.send(result);
 	});
 });
