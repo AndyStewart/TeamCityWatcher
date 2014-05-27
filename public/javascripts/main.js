@@ -37,10 +37,21 @@ buildMonitorController.$inject = ['$scope', '$http', '$timeout', '$location'];
 
 function buildController($scope, $http, $timeout) {
     $scope.build.result = "UNKNOWN";
-    var buildUrl = "/project/" + $scope.projectName + "/pipelines/" + $scope.pipeline.id + "/builds/" + $scope.build.builtTypeId;
-    $http.get(buildUrl).success(function(data) {
-        $scope.build = data;
-    });
+
+    function loadBuildInfo() {
+        $scope.refreshInProgress = true;
+        var buildUrl = "/project/" + $scope.projectName + "/pipelines/" + $scope.pipeline.id + "/builds/" + $scope.build.buildTypeId;
+        $http.get(buildUrl)
+                .success(function(data, status, headers) {
+                            $scope.build = data;
+                            if (data == null || data.result === "SUCCESS") {
+                                $timeout(loadBuildInfo, 10000);    
+                            }
+                            $scope.refreshInProgress = false;
+                        });
+    }
+
+    loadBuildInfo();
 }
 
 function changeController($scope, $http) {

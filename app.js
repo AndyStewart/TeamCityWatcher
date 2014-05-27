@@ -31,9 +31,10 @@ var buildRepository = require("./lib/infrastructure/buildRepository");
 var pipelineRepository = require("./lib/infrastructure/pipelineConfigurationRepository");
 var changeRepository = require("./lib/infrastructure/changeRepository");
 var pipelineBuilder = require("./lib/application/pipelineBuilder");
+var buildLocator = require("./lib/application/buildLocator");
 
 function sendAndCache(res, result) {
-	//res.set('Cache-Control', 'public, max-age=31536000');
+	res.set('Cache-Control', 'public, max-age=31536000');
 	res.send(result);
 }
 
@@ -45,7 +46,18 @@ app.get('/project/:projectName/pipelines', function(req, res) {
 	res.send({ projectName: req.params.projectName });
 });
 
-app.get('/project/:projectName/pipelines/:id/builds/:builtTypeId', function(req, res) {
+app.get('/project/:projectName/pipelines/:id/builds/:buildTypeId', function(req, res) {
+	buildLocator.locate(buildRepository, req.params.id, req.params.projectName, req.params.buildTypeId, function(error, build) {
+		if (build !== undefined) {
+			return res.redirect('/project/' + req.params.projectName + "/build/" + build.id);
+		}
+
+		res.status(404);
+		return res.send({ error: 'Not found' });
+	});
+})
+
+app.get('/project/:projectName/build/:id', function(req, res) {
 	buildRepository.getById(req.params.id, function(error, build){
 		return (build.isComplete) ? sendAndCache(res, build) : res.send(build);
 	});
