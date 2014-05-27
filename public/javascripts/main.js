@@ -15,7 +15,7 @@ function buildMonitorController($scope, $http, $timeout, $location) {
             if (!$scope.buildInformation) {
                 $scope.buildInformation = data;
             } else {
-                if ($scope.buildInformation[0].id != data.buildInformation[0].id) {
+                if ($scope.buildInformation[0].id !== data[0].id) {
                     $scope.buildInformation = data;
                 }
             }
