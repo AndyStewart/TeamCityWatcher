@@ -53,7 +53,10 @@ function buildController($scope, $http, $timeout) {
                             if (data === null || data.result != "SUCCESS") {
                                 $timeout(loadBuildInfo, 10000);    
                             }
-                        });
+                        })
+                .error(function() {
+                    $timeout(loadBuildInfo, 10000); 
+                });
     }
 
     loadBuildInfo();
