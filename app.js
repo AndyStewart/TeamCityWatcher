@@ -59,7 +59,7 @@ app.get('/project/:projectName/pipelines/:id/builds/:buildTypeId', function(req,
 
 app.get('/project/:projectName/build/:id', function(req, res) {
 	buildRepository.getById(req.params.id, function(error, build){
-		return (build.isComplete) ? sendAndCache(res, build) : res.send(build);
+		return (build.result === "SUCCESS") ? sendAndCache(res, build) : res.send(build);
 	});
 })
 

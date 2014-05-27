@@ -12,7 +12,13 @@ function buildMonitorController($scope, $http, $timeout, $location) {
 
     function updateScreen(data) {
         try {
-            $scope.buildInformation = data;
+            if (!$scope.buildInformation) {
+                $scope.buildInformation = data;
+            } else {
+                if ($scope.buildInformation[0].id != data.buildInformation[0].id) {
+                    $scope.buildInformation = data;
+                }
+            }
         } finally {
             $scope.refreshInProgress = false;
             waitThenUpdateScreen();
@@ -44,10 +50,9 @@ function buildController($scope, $http, $timeout) {
         $http.get(buildUrl)
                 .success(function(data, status, headers) {
                             $scope.build = data;
-                            if (data == null || data.result === "SUCCESS") {
+                            if (data === null || data.result != "SUCCESS") {
                                 $timeout(loadBuildInfo, 10000);    
                             }
-                            $scope.refreshInProgress = false;
                         });
     }
 
