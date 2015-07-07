@@ -15,8 +15,10 @@ function loadProject(projectName, callback) {
 	});
 }
 
-function renderPipeline(pipeline) {
-	var builds = pipeline.builds.map(renderBuild);
+function renderPipeline(projectName, pipeline) {
+	var builds = pipeline.builds.map(function(build) {
+		return <Build projectName={projectName} build={build} pipeline={pipeline} />;
+	});
 	return <div className="row Pipeline">
 				<div className="col-md-12">
 					<h4>#{pipeline.number} started at {pipeline.startTime}</h4>
@@ -29,7 +31,9 @@ function renderPipeline(pipeline) {
 }
 
 function renderProject(project) {
-    var pipelines = project.pipelines.map(renderPipeline);
+    var pipelines = project.pipelines.map(function(pipline) {
+		return renderPipeline(project.name, pipline);
+	});
 	var component = <div>
 						<div className="row">
       						<div className="col-md-12">
