@@ -21,7 +21,7 @@ function renderPipeline(projectName, pipeline) {
 	});
 	return <div className="row Pipeline">
 				<div className="col-md-12">
-					<h4>#{pipeline.number} started at {pipeline.startTime}</h4>
+					<h4>#{pipeline.number} started {getDate(pipeline.startTime)}</h4>
 					<Changes pipeline={pipeline} />
 					<div className="row">
 					{builds}

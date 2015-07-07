@@ -1,21 +1,11 @@
-function getChanges(projectName, pipeline, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-	    if (xhr.readyState == 4) {
-	        callback(null, JSON.parse(xhr.responseText));
-	    }
-	}
-	xhr.open('GET', "/project/" + projectName + "/pipelines/" + pipeline.id + "/changes", true);
-	xhr.send(null);
-}
-
 var Changes = React.createClass({
 	getInitialState: function() {
 		return { changes: [] };
 	},
 	componentDidMount: function() {
 		var _this = this;
-		getChanges(this.props.pipeline.name, this.props.pipeline, function(err, result) {
+		var url =  "/project/" + this.props.pipeline.name + "/pipelines/" + this.props.pipeline.id + "/changes"
+		get(url, function(err, result) {
 			_this.setState({changes: result});
 		});
 	},

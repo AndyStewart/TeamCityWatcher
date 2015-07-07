@@ -21,7 +21,7 @@ function renderPipeline(projectName, pipeline) {
 	});
 	return React.createElement("div", {className: "row Pipeline"}, 
 				React.createElement("div", {className: "col-md-12"}, 
-					React.createElement("h4", null, "#", pipeline.number, " started at ", pipeline.startTime), 
+					React.createElement("h4", null, "#", pipeline.number, " started ", getDate(pipeline.startTime)), 
 					React.createElement(Changes, {pipeline: pipeline}), 
 					React.createElement("div", {className: "row"}, 
 					builds

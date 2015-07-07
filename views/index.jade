@@ -3,11 +3,5 @@ extends layout
 h1
 block content
   div#BuildMonitor.container-fluid
-
-                  //- //- document.addEventListener("DOMContentLoaded", function(event) {
-                  //-   getBuild('E-Subs', 40520, 'ESubs_ESubs', function(err, result) {
-                  //-     renderBuild(result);
-                  //-     });
-                  //- //- });
-    div(class="load" ng-class="{loadInProgress: refreshInProgress==true}")
+    div(class="load")
       span Loading In Progress
