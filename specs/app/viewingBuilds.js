@@ -4,11 +4,6 @@ var buildQueries = require("../../app/buildQueries");
 
 describe('Builds', function() {
   describe('Viewing Builds', function () {
-    // it('Empty build server returns no results', function () {
-    //     var result = buildQueries.findAll();
-    //     result.length.should.equal(0);
-    // });
-
     it('build server results are converted to builds', function (done) {
     	function findBuildsOnServer() {
     		return new Promise(function (resolve, reject) {
@@ -38,7 +33,8 @@ describe('Builds', function() {
 	    	});
     	}
 
-        buildQueries.findAll(findBuildsOnServer).then(function(result) {
+    	var findAllQuery = buildQueries.newFindAllQuery(findBuildsOnServer);
+        findAllQuery().then(function(result) {
         	result.length.should.equal(2);
         	result[0].id.should.equal(40930);
         	result[0].status.should.equal("FAILURE");

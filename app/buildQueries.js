@@ -1,10 +1,13 @@
-function findAll(findServerBuilds) {
-	function convertToBuild(serverResult)
-	{	
-		return serverResult.build.map(function(result) {
-			return { status: result.status, id: result.id};
-		})
+function newFindAllQuery(findServerBuilds) {
+	return function () {
+		function convertToBuild(serverResult)
+		{	
+			return serverResult.build.map(function(result) {
+				return { status: result.status, id: result.id};
+			})
+		}
+
+		return findServerBuilds().then(convertToBuild);
 	}
-	return findServerBuilds().then(convertToBuild);
 }
-module.exports = { findAll: findAll }
+module.exports = { newFindAllQuery: newFindAllQuery }
