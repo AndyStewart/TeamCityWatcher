@@ -50,4 +50,35 @@ describe('Builds', function() {
     	});
 
 	});
+
+	describe('Get information about a build', function() {
+		function buildInformation(buildId) {
+			return new Promise(function (resolve, reject) {
+						    		resolve({
+						    			"id": buildId,
+						    			"status": 'FAILURE',
+						    			"buildType": {
+						    				id: 1,
+						    				name: 'Build Name'
+						    			},
+						    			"statusText": 'Failed Broken tests'
+						    			});
+						    	});
+		}
+		it('returns the id of the build', function(done){
+			builds.id(41039, buildInformation, function(r) { r.id.should.equal(41039); done();});
+		});
+
+		it('returns the status of the build', function(done){
+			builds.id(41039, buildInformation, function(r) { r.status.should.equal("FAILURE"); done();});
+		});
+
+		it('returns the name of the build', function(done){
+			builds.id(41039, buildInformation, function(r) { r.name.should.equal("Build Name"); done();});
+		});
+
+		it('returns the status text of the build', function(done){
+			builds.id(41039, buildInformation, function(r) { r.statusText.should.equal("Failed Broken tests"); done();});
+		});
+	});
 });

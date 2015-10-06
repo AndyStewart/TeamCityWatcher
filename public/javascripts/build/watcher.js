@@ -2,7 +2,7 @@ function loadBuilds(builds) {
 	return builds.map(function(build) {
 		return React.createElement("div", null, 
 				React.createElement("h1", null, build.status), 
-				React.createElement("h1", null, build.id)
+				build.id
 			   );
 	})
 }

@@ -1,14 +1,23 @@
 var request = require('request-promise');
 
-function builds() {
+function get(path) {
 	var options = {
-			    uri : 'http://solicitors-build:8023/guestAuth/app/rest/builds/',
+			    uri : 'http://solicitors-build:8023/guestAuth/app/rest/' + path,
 			    method : 'GET',
 			    json: true
 			};
 	return request(options);
 }
 
+function builds() {
+	return get("builds");
+}
+
+function buildInfo(buildId) {
+	return get("builds/id:" + buildId);
+}
+
 module.exports = {
-	builds: builds
+	builds: builds,
+	buildInfo: buildInfo
 }
