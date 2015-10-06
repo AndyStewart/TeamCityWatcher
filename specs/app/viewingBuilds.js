@@ -1,6 +1,6 @@
 var should = require("should");
 var Promise = require("bluebird");
-var buildQueries = require("../../app/buildQueries");
+var buildQueries = require("../../app/queries/buildQueries");
 
 describe('Builds', function() {
   describe('Viewing Builds', function () {
@@ -17,27 +17,26 @@ describe('Builds', function() {
 			        };
     	}
 
-    	function findBuildsOnServer() {
-    		return new Promise(function (resolve, reject) {
-	    		resolve({
-	    			"build": [
-				        buildResult({id: 40930, status: "FAILURE"}),
-				        buildResult({id: 40927, status: "SUCCESS"})]
-	    		});
-	    	});
-    	}
+		var getServerBuilds = new Promise(function (resolve, reject) {
+    		resolve({
+    			"build": [
+			        buildResult({id: 40930, status: "FAILURE"}),
+			        buildResult({id: 40927, status: "SUCCESS"})]
+    		});
+    	});
 
-    	var findAllQuery = buildQueries.newFindAllQuery(findBuildsOnServer);
-        findAllQuery().then(function(result) {
-        	result.length.should.equal(2);
-        	result[0].id.should.equal(40930);
-        	result[0].status.should.equal("FAILURE");
-        	
-        	result[1].id.should.equal(40927);
-        	result[1].status.should.equal("SUCCESS");
-        	result.length.should.equal(2);
-        	done();
-        });
-    });
+    	getServerBuilds
+	    	.then(buildQueries.convertToBuilds)
+	        .then(function(result) {
+	        	result.length.should.equal(2);
+	        	result[0].id.should.equal(40930);
+	        	result[0].status.should.equal("FAILURE");
+	        	
+	        	result[1].id.should.equal(40927);
+	        	result[1].status.should.equal("SUCCESS");
+	        	result.length.should.equal(2);
+	        	done();
+	        });
+	    });
   });
 });
