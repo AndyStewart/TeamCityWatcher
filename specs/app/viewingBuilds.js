@@ -11,12 +11,12 @@ describe('Builds', function() {
 	    			"build": [
 				        {
 				            "id": 40930,
-				            "buildTypeId": "IrisLawBusiness_UATEnvironment",
+				            "buildTypeId": "bt12",
 				            "number": "11510",
 				            "status": "FAILURE",
 				            "state": "finished",
 				            "href": "/guestAuth/app/rest/builds/id:40930",
-				            "webUrl": "http://solicitors-build:8023/viewLog.html?buildId=40930&buildTypeId=IrisLawBusiness_UATEnvironment"
+				            "webUrl": "http://server-name/viewLog.html?buildId=40930&buildTypeId=bt12"
 				        },
 				        {
 				            "id": 40927,
@@ -27,7 +27,7 @@ describe('Builds', function() {
 				            "branchName": "refs/heads/develop",
 				            "defaultBranch": true,
 				            "href": "/guestAuth/app/rest/builds/id:40927",
-				            "webUrl": "http://solicitors-build:8023/viewLog.html?buildId=40927&buildTypeId=bt12"
+				            "webUrl": "http://server-name/viewLog.html?buildId=40927&buildTypeId=bt12"
 				        }]
 	    		});
 	    	});
