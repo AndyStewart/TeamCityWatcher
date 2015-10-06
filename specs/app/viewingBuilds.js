@@ -5,30 +5,24 @@ var buildQueries = require("../../app/buildQueries");
 describe('Builds', function() {
   describe('Viewing Builds', function () {
     it('build server results are converted to builds', function (done) {
+    	function buildResult(build) {
+    		return {
+			            "id": build.id,
+			            "buildTypeId": "bt12",
+			            "number": "11510",
+			            "status": build.status,
+			            "state": "finished",
+			            "href": "/guestAuth/app/rest/builds/id:40930",
+			            "webUrl": "http://server-name/viewLog.html?buildId=40930&buildTypeId=bt12"
+			        };
+    	}
+
     	function findBuildsOnServer() {
     		return new Promise(function (resolve, reject) {
 	    		resolve({
 	    			"build": [
-				        {
-				            "id": 40930,
-				            "buildTypeId": "bt12",
-				            "number": "11510",
-				            "status": "FAILURE",
-				            "state": "finished",
-				            "href": "/guestAuth/app/rest/builds/id:40930",
-				            "webUrl": "http://server-name/viewLog.html?buildId=40930&buildTypeId=bt12"
-				        },
-				        {
-				            "id": 40927,
-				            "buildTypeId": "bt12",
-				            "number": "11510",
-				            "status": "SUCCESS",
-				            "state": "finished",
-				            "branchName": "refs/heads/develop",
-				            "defaultBranch": true,
-				            "href": "/guestAuth/app/rest/builds/id:40927",
-				            "webUrl": "http://server-name/viewLog.html?buildId=40927&buildTypeId=bt12"
-				        }]
+				        buildResult({id: 40930, status: "FAILURE"}),
+				        buildResult({id: 40927, status: "SUCCESS"})]
 	    		});
 	    	});
     	}
