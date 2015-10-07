@@ -5,11 +5,13 @@ var builds = require('../app/queries/builds');
 var teamcity = require('../app/adapters/teamcity');
 
 router.get('/', function(req, res) {
-	builds.all(teamcity.builds, data => res.send(data));
+	builds.all(teamcity.builds)
+		  .then(data => res.send(data));
 });
 
 router.get('/:id', function(req, res) {
-	builds.id(req.params.id, teamcity.buildInfo, data => res.send(data));
+	builds.information(req.params.id, teamcity.buildInfo)
+		  .then(data => res.send(data));
 });
 
 

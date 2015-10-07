@@ -29,20 +29,24 @@ describe('Builds', function() {
 		}
 
 		it('returns correct amount of results', function (done) {
-    		builds.all(allBuilds, function(r) { r.length.should.equal(2) });
-    		done();
+    		builds.all(allBuilds)
+    				.then(function(r) {
+    							r.length.should.equal(2);
+    				    		done();
+		    		});
     	});
 
 		it('returns the id of the build', function (done) {
-    		builds.all(allBuilds, function(r){ 
-    			r[0].id.should.equal(40930);
-    			r[1].id.should.equal(40927);
-    			done();
-    		});
-    	});
+    		builds.all(allBuilds)
+	    			.then(function(r){ 
+		    			r[0].id.should.equal(40930);
+		    			r[1].id.should.equal(40927);
+		    			done();
+		    		});
+	    	});
 
 		it('returns the status of the build', function (done) {
-    		builds.all(allBuilds, function(r){ 
+    		builds.all(allBuilds).then(function(r){ 
     			r[0].status.should.equal("FAILURE");
     			r[1].status.should.equal("SUCCESS");
     			done();
@@ -66,19 +70,26 @@ describe('Builds', function() {
 						    	});
 		}
 		it('returns the id of the build', function(done){
-			builds.id(41039, buildInformation, function(r) { r.id.should.equal(41039); done();});
+			builds.information(41039, buildInformation)
+					.then(function(r) { r.id.should.equal(41039); done();});
 		});
 
 		it('returns the status of the build', function(done){
-			builds.id(41039, buildInformation, function(r) { r.status.should.equal("FAILURE"); done();});
+			builds.information(41039, buildInformation)
+					.then(function(r) { 
+							r.status.should.equal("FAILURE"); 
+							done();
+						});
 		});
 
 		it('returns the name of the build', function(done){
-			builds.id(41039, buildInformation, function(r) { r.name.should.equal("Build Name"); done();});
+			builds.information(41039, buildInformation)
+					.then(function(r) { r.name.should.equal("Build Name"); done();});
 		});
 
 		it('returns the status text of the build', function(done){
-			builds.id(41039, buildInformation, function(r) { r.statusText.should.equal("Failed Broken tests"); done();});
+			builds.information(41039, buildInformation)
+					.then(function(r) { r.statusText.should.equal("Failed Broken tests"); done();});
 		});
 	});
 });

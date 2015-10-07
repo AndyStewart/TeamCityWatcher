@@ -13,11 +13,11 @@ function builds() {
 	return get("builds");
 }
 
-function buildInfo(buildId) {
+function information(buildId) {
 	return get("builds/id:" + buildId);
 }
 
 module.exports = {
 	builds: builds,
-	buildInfo: buildInfo
+	information: information
 }
