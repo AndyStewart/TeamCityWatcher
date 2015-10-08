@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-	builds.information(req.params.id, teamcity.buildInfo)
+	builds.information(req.params.id, teamcity.information)
 		  .then(data => res.send(data));
 });
 
