@@ -1,16 +1,12 @@
-function getBuilds(callback) {
-	get('/builds/', callback);
-}
-
 function get(url, callback) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-		callback(null, JSON.parse(xhttp.responseText));
-    }
-  }
-  xhttp.open("GET", url, true);
-  xhttp.send();
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			callback(null, JSON.parse(xhttp.responseText));
+		}
+	}
+	xhttp.open("GET", url, true);
+	xhttp.send();
 }
 
 var Build = React.createClass({
@@ -55,5 +51,5 @@ function displayMessage(err, builds) {
 }
 
 function init() {
-	getBuilds(displayMessage);
+	get('/builds',displayMessage);
 }
