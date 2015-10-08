@@ -1,8 +1,8 @@
 function loadBuilds(builds) {
 	return builds.map(function(build) {
-		return React.createElement("div", null, 
-				React.createElement("h1", null, build.status), 
-				build.id
+		var classes = "build " + build.status;
+		return React.createElement("div", {className: classes}, 
+				React.createElement("h2", null, "#", build.id)
 			   );
 	})
 }

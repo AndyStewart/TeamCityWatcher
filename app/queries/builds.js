@@ -5,7 +5,7 @@ function all(serverResults) {
 	}
 
 	function convertToBuilds(serverResult) {
-		return serverResult.build.map(createBuild);
+		return serverResult.build.map(createBuild).slice(0,5);
 	}
 
 	return serverResults().then(convertToBuilds);

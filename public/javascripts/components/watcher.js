@@ -1,8 +1,8 @@
 function loadBuilds(builds) {
 	return builds.map(function(build) {
-		return <div>
-				<h1>{build.status}</h1>
-				{build.id}
+		var classes = "build " + build.status;
+		return <div className={classes}>
+				<h2>#{build.id}</h2>
 			   </div>;
 	})
 }

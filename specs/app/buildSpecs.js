@@ -23,15 +23,19 @@ describe('Builds', function() {
 						    		resolve({
 						    			"build": [
 									        buildResult({id: 40930, status: "FAILURE"}),
-									        buildResult({id: 40927, status: "SUCCESS"})]
+									        buildResult({id: 40927, status: "SUCCESS"}),
+									        buildResult({id: 40926, status: "SUCCESS"}),
+									        buildResult({id: 40925, status: "SUCCESS"}),
+									        buildResult({id: 40924, status: "SUCCESS"}),
+									        buildResult({id: 40923, status: "SUCCESS"})]
 						    		});
 						    	});
 		}
 
-		it('returns correct amount of results', function (done) {
+		it('returns maximum of 5 result', function (done) {
     		builds.all(allBuilds)
     				.then(function(r) {
-    							r.length.should.equal(2);
+    							r.length.should.equal(5);
     				    		done();
 		    		});
     	});
