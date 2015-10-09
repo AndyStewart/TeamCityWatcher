@@ -1,16 +1,3 @@
-function all(serverResults) {
-
-	function createBuild(serverBuild) {
-		return { status: serverBuild.status, id: serverBuild.id};
-	}
-
-	function convertToBuilds(serverResult) {
-		return serverResult.build.map(createBuild).slice(0,5);
-	}
-
-	return serverResults().then(convertToBuilds);
-}
-
 function information(id, buildInformation) {
 
 	function convertToBuildInformation(serverBuild) {
@@ -20,4 +7,16 @@ function information(id, buildInformation) {
 	return buildInformation(id).then(convertToBuildInformation);
 }
 
-module.exports = { all: all, information: information }
+function pipelines(getBuildSummaries) {
+	function convertToPipeline(buildSummary) {
+		return [{ status: buildSummary.status, id: buildSummary.id}];
+	}
+
+	function convertToPipelines(latestBuilds) {
+		return latestBuilds.build.slice(0,5).map(convertToPipeline);
+	}
+
+	return getBuildSummaries().then(convertToPipelines);	
+}
+
+module.exports = { information: information, pipelines: pipelines }

@@ -39,14 +39,20 @@ var Build = React.createClass({displayName: "Build",
   	}
 });
 
-function loadBuilds(builds) {
-	return builds.map(function(build) {
+function renderPipeline(pipeline) {
+	return pipeline.map(function(build) {
 		return React.createElement(Build, {build: build});
 	})
 }
 
-function displayMessage(err, builds) {
-	React.render(React.createElement("h1", null, loadBuilds(builds)), document.getElementById('output'));
+function loadPipelines(pipelines) {
+	return pipelines.map(function(pipeline) {
+		return React.createElement("div", {className: "pipeline"}, renderPipeline(pipeline));
+	})
+}
+
+function displayMessage(err, pipelines) {
+	React.render(React.createElement("div", null, loadPipelines(pipelines)), document.getElementById('output'));
 }
 
 function init() {
