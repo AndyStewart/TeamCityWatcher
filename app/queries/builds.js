@@ -7,13 +7,13 @@ function information(id, buildInformation) {
 	return buildInformation(id).then(convertToBuildInformation);
 }
 
-function pipelines(getBuildSummaries) {
-	function convertToPipeline(buildSummary) {
-		return [{ status: buildSummary.status, id: buildSummary.id}];
+function pipelines(getBuildSummaries, getBuildInformation) {
+	function convertToBuilds(buildSummary) {
+		return getBuildInformation(buildSummary.id);
 	}
 
 	function convertToPipelines(latestBuilds) {
-		return latestBuilds.build.slice(0,5).map(convertToPipeline);
+		return latestBuilds.build.map(convertToBuilds).slice(0, 5);
 	}
 
 	return getBuildSummaries().then(convertToPipelines);	

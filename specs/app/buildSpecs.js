@@ -100,7 +100,7 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 			});
 	});
 
-	it("Build has an id, name and statusText", function(done) {
+	it("Build has an id", function(done) {
 		builds.pipelines(getLatestBuilds)
 			.then(function(results) {
 				results[0][0].id.should.equal(1);
@@ -109,4 +109,35 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 				done();
 			});
 	});
+});
+
+describe('Generating a pipeline with builds relate to each other by snapshot dependencies', function() {
+	var buildSummaries = { build: [ buildSummary({id:1}), 
+									buildSummary({id:2}), 
+									buildSummary({id:3}),
+									buildSummary({id:4})] };
+
+	var buildInformations = { "4": buildInformation(4, [buildSummary({id:3}),buildSummary({id:2})]),
+							 "1": buildInformation(1, []) };
+
+	function getLatestBuilds() {
+		return new Promise(function (resolve, reject) {
+					    		resolve(buildSummaries);
+					    	});
+	}
+
+	function getBuildInfo(buildId) {
+		return new Promise(function (resolve, reject) {
+					    		resolve(buildInformations[buildId]);
+					    	});
+	}
+
+	it("Pipeline contains 3 builds", function(done) {
+		builds.pipelines(getLatestBuilds, getBuildInfo)
+			.then(function(results) {
+				results[0].length.should.equal(3);
+				done();
+			});
+	});
+
 });
