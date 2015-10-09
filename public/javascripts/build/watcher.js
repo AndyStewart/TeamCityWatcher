@@ -19,10 +19,9 @@ var Build = React.createClass({displayName: "Build",
 		};
 	},
   	componentDidMount: function() {
-	  	var _this = this;
-	    get("/builds/" + this.props.build.id, function(err, result) {
-	    	if (_this.isMounted()) {
-		  		_this.setState({
+	    get("/builds/" + this.props.build.id, (err, result) => {
+	    	if (this.isMounted()) {
+		  		this.setState({
 				  id: result.id,
 				  name: result.name,
 				  status: result.status,
