@@ -8,9 +8,17 @@ h1 {
 	text-align: center;
 }
 
+.pipeline {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+    margin: 10px;
+}
+
 .build {
 	padding: 10px;
-	margin: 10px;
+	display:table-cell;
+	border-spacing: 10px;
 	color: #FFFFFF;
 }
 
