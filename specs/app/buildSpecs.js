@@ -38,6 +38,7 @@ function buildInformation(buildId, builds)
 					}
 			}
 		}
+
 describe('Get information about a build', function() {
 	function getBuildInfo(buildId) {
 		return new Promise(function (resolve, reject) {
@@ -76,49 +77,12 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 									buildSummary({id:5}), 
 									buildSummary({id:6})] };
 
-	function getLatestBuilds() {
-		return new Promise(function (resolve, reject) {
-					    		resolve(buildSummaries);
-					    	});
-	}
-
-	it("Returns five pipelines", function(done) {
-		builds.pipelines(getLatestBuilds)
-			.then(function(results) {
-				results.length.should.equal(5);
-				done();
-			});
-	});
-
-	it("Each pipeline contains 1 build", function(done) {
-		builds.pipelines(getLatestBuilds)
-			.then(function(results) {
-				results[0].length.should.equal(1);
-				results[1].length.should.equal(1);
-				results[2].length.should.equal(1);
-				done();
-			});
-	});
-
-	it("Build has an id", function(done) {
-		builds.pipelines(getLatestBuilds)
-			.then(function(results) {
-				results[0][0].id.should.equal(1);
-				results[1][0].id.should.equal(2);
-				results[2][0].id.should.equal(3);
-				done();
-			});
-	});
-});
-
-describe('Generating a pipeline with builds relate to each other by snapshot dependencies', function() {
-	var buildSummaries = { build: [ buildSummary({id:1}), 
-									buildSummary({id:2}), 
-									buildSummary({id:3}),
-									buildSummary({id:4})] };
-
-	var buildInformations = { "4": buildInformation(4, [buildSummary({id:3}),buildSummary({id:2})]),
-							 "1": buildInformation(1, []) };
+	var buildInformations = { "6": buildInformation(6, []),
+							  "5": buildInformation(5, []),
+							  "4": buildInformation(4, []),
+							  "3": buildInformation(3, []),
+							  "2": buildInformation(2, []),
+							  "1": buildInformation(1, []) };
 
 	function getLatestBuilds() {
 		return new Promise(function (resolve, reject) {
@@ -132,10 +96,71 @@ describe('Generating a pipeline with builds relate to each other by snapshot dep
 					    	});
 	}
 
+	it("Returns five pipelines", function(done) {
+		builds.pipelines(getLatestBuilds, getBuildInfo)
+			.then(function(results) {
+				results.length.should.equal(5);
+				done();
+			});
+	});
+
+	it("Each pipeline contains 1 build", function(done) {
+		builds.pipelines(getLatestBuilds, getBuildInfo)
+			.then(function(results) {
+				results[0].length.should.equal(1);
+				results[1].length.should.equal(1);
+				results[2].length.should.equal(1);
+				done();
+			});
+	});
+
+	it("Build has an id", function(done) {
+		builds.pipelines(getLatestBuilds, getBuildInfo)
+			.then(function(results) {
+				results[0][0].id.should.equal(1);
+				results[1][0].id.should.equal(2);
+				results[2][0].id.should.equal(3);
+				done();
+			});
+	});
+});
+
+describe('Generating a pipeline with builds relate to each other by snapshot dependencies', function() {
+	var buildSummaries = { build: [ buildSummary({id:4}),
+									buildSummary({id:3}),
+									buildSummary({id:2}), 
+									buildSummary({id:1})
+									] };
+
+	var buildInformations = { "4": buildInformation(4, [buildSummary({id:3})]),
+							  "3": buildInformation(3, [buildSummary({id:2})]),
+							  "2": buildInformation(2, [buildSummary({id:1})]),
+							  "1": buildInformation(1, []) };
+
+	function getLatestBuilds() {
+		return new Promise(function (resolve, reject) {
+					    		resolve(buildSummaries);
+					    	});
+	}
+
+	function getBuildInfo(buildId) {
+		return new Promise(function (resolve, reject) {
+					    		resolve(buildInformations[buildId]);
+					    	});
+	}
+
+	it("Should have 1 pipeline", function(done) {
+			builds.pipelines(getLatestBuilds, getBuildInfo)
+				.then(function(results) {
+					results.length.should.equal(1);
+					done();
+				});
+		});
+
 	it("Pipeline contains 3 builds", function(done) {
 		builds.pipelines(getLatestBuilds, getBuildInfo)
 			.then(function(results) {
-				results[0].length.should.equal(3);
+				results[0].length.should.equal(4);
 				done();
 			});
 	});
