@@ -9,62 +9,70 @@ function information(id, buildInformation) {
 
 function pipelines(getBuildSummaries, getBuildInformation) {
 
-	function cache(cacheable) {
-		var results = {};
-		return function(buildId) {
-			if (results[buildId] !== undefined) {
-				return results[buildId];
+	function getAllBuildSummaries() {
+		return getBuildSummaries()
+					.then(function(response) {
+						return response.build;
+					});
+	}
+
+	function pipeline(builds) {
+		return {
+			builds: builds,
+			add: function(build) {
+				return pipeline([build].concat(builds));
+			},
+			last: function() {
+				return builds[builds.length-1];
 			}
-			results[buildId] = cacheable(buildId);
-			return results[buildId];
+		}
+	}
+
+	function buildScreen(pipelines) {
+		return {
+			pipelines: pipelines,
+			add: function(pipeline) {
+				return buildScreen(pipelines.concat(pipeline));
+			}
 		};
 	}
 
-	var cachedBuildInformation = cache(getBuildInformation);
-
-	function createEmptyPipeline() {
-		return [];
+	function getDependent(build) {
+		return build["snapshot-dependencies"].build[0].id;
 	}
 
-	function appendToPipeline(pipeline, build) {
-		return pipeline.concat(build);
+	function addBuildToPipeline(pipeline, buildId) {
+		return getBuildInformation(buildId)
+				.then(pipeline.add)
+				.then(function(newPipeline) {
+					var lastBuild = newPipeline.last();
+					if (lastBuild["snapshot-dependencies"] && lastBuild["snapshot-dependencies"].build.length > 0)
+						return addBuildToPipeline(newPipeline, getDependent(lastBuild))
+					return newPipeline;
+				});
+
 	}
 
-	function findDependantBuilds(build) {
-		if (build["snapshot-dependencies"] == undefined){
-			return createEmptyPipeline();
+	function loadPipeline(build) {
+		return addBuildToPipeline(pipeline([]), build.id)
+				.then(function(pipeline) {
+					return pipeline.builds;
+				});
+	}
+
+	function builds(screen) {
+		return function(build) {
+			return loadPipeline(build).then(screen.add)
 		}
-		var dependants = build["snapshot-dependencies"].build;	
-		if (dependants.length > 0) {
-			return cachedBuildInformation(dependants[0].id)
-					.then(findDependantBuilds)
-					.then(function(pipeline) {
-						return appendToPipeline(pipeline, build);
-					});
-		} else {
-			return appendToPipeline(createEmptyPipeline(), build);
-		}
 	}
 
-	function createNextPipeline(topBuild) {
-		return cachedBuildInformation(topBuild.id)
-					.then(findDependantBuilds);
-	}
-
-	function parseSummaries(buildSummaries) {
-		return buildSummaries.build;
-	}
-
-	function first5(pipelines) {
-		var snapShot= pipelines.slice(0, 5);
-		 // console.log(snapShot);
-		return snapShot;		
-	}
-
-	return getBuildSummaries()
-				.then(parseSummaries)
-				.map(createNextPipeline)
-				.then(first5);
+	var screen = buildScreen([]);
+	return getAllBuildSummaries()
+				.then(builds(screen))
+				.then(function(screen) {
+					console.log(screen.pipelines);
+					return screen.pipelines;
+				});
 }
 
 module.exports = { information: information, pipelines: pipelines }
