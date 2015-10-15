@@ -22,19 +22,27 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 
 	var cachedBuildInformation = cache(getBuildInformation);
 
+	function createEmptyPipeline() {
+		return [];
+	}
+
+	function appendToPipeline(pipeline, build) {
+		return pipeline.concat(build);
+	}
+
 	function findDependantBuilds(build) {
 		if (build["snapshot-dependencies"] == undefined){
-			return[];
+			return createEmptyPipeline();
 		}
 		var dependants = build["snapshot-dependencies"].build;	
 		if (dependants.length > 0) {
 			return cachedBuildInformation(dependants[0].id)
 					.then(findDependantBuilds)
-					.then(function(dependant) {
-						return dependant.concat(build);
+					.then(function(pipeline) {
+						return appendToPipeline(pipeline, build);
 					});
 		} else {
-			return [build];
+			return appendToPipeline(createEmptyPipeline(), build);
 		}
 	}
 
