@@ -108,8 +108,9 @@ describe('Generating a pipeline with builds relate to each other by snapshot dep
 				done();
 			});
 	});
+});
 
-	describe('Generating a pipeline with where each pipeline contans one build', function() {
+describe('Generating a pipeline with where each pipeline contans one build', function() {
 		var buildSummaries = { build: [ buildSummary({id:1}), 
 										buildSummary({id:2}), 
 										buildSummary({id:3}),
@@ -164,4 +165,3 @@ describe('Generating a pipeline with builds relate to each other by snapshot dep
 				});
 		});
 	});
-});
