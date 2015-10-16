@@ -56,7 +56,7 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	}
 
 	function addPipelineToScreen(screen, builds) {
-		if (builds.length == 0) {
+		if (builds.length == 0 || screen.pipelines.length == 5) {
 			return screen;
 		}
 
@@ -81,7 +81,7 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	}
 
 	function convertScreenToResponse(screen) {
-		return screen.pipelines.map(q => q.builds).slice(0,5);
+		return screen.pipelines.map(q => q.builds);
 	}
 
 	var emptyScreen = buildScreen([]);
