@@ -10,7 +10,7 @@ function get(path) {
 }
 
 function builds() {
-	return get("builds");
+	return get("builds?locator=running:any");
 }
 
 function information(buildId) {

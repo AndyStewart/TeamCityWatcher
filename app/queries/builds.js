@@ -10,10 +10,7 @@ function information(id, buildInformation) {
 function pipelines(getBuildSummaries, getBuildInformation) {
 
 	function getAllBuildSummaries() {
-		return getBuildSummaries()
-					.then(function(response) {
-						return response.build;
-					});
+		return getBuildSummaries().then(r => r.build);
 	}
 
 	function pipeline(builds) {
@@ -24,6 +21,9 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 			},
 			first: function() {
 				return builds[0];
+			},
+			contains: function(id) {
+				return builds.some(b => b.id == id);
 			}
 		}
 	}
@@ -33,6 +33,9 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 			pipelines: pipelines,
 			add: function(pipeline) {
 				return buildScreen(pipelines.concat(pipeline));
+			},
+			contains: function(id) {
+				return pipelines.some(p => p.contains(id));
 			}
 		};
 	}
@@ -52,23 +55,39 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 				});
 	}
 
-	function loadPipeline(builds) {
-		return addBuildToPipeline(pipeline([]), builds[0].id);
+	function addPipelineToScreen(screen, builds) {
+		if (builds.length == 0) {
+			return screen;
+		}
+
+		var buildToAdd = builds[0].id;
+		if (screen.contains(buildToAdd))
+			return addPipelineToScreen(screen, builds.slice(1));
+
+		return addBuildToPipeline(pipeline([]), buildToAdd)
+					.then(screen.add)
+					.then(function(newScreen) {
+							if (builds.length > 1) {
+								return addPipelineToScreen(newScreen, builds.slice(1));
+							}
+							return newScreen;
+						});
 	}
 
-	function builds(screen) {
+	function addBuildsToScreen(screen) {
 		return function(builds) {
-			return loadPipeline(builds).then(screen.add)
+			return addPipelineToScreen(screen, builds);
 		}
 	}
 
-	var screen = buildScreen([]);
+	function convertScreenToResponse(screen) {
+		return screen.pipelines.map(q => q.builds).slice(0,5);
+	}
+
+	var emptyScreen = buildScreen([]);
 	return getAllBuildSummaries()
-				.then(builds(screen))
-				.then(function(screen) {
-					var builds = screen.pipelines.map(q => q.builds);
-					return builds;
-				});
+				.then(addBuildsToScreen(emptyScreen))
+				.then(convertScreenToResponse);
 }
 
 module.exports = { information: information, pipelines: pipelines }
