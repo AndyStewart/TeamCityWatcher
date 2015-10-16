@@ -19,11 +19,11 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	function pipeline(builds) {
 		return {
 			builds: builds,
-			add: function(build) {
+			insertAtFront: function(build) {
 				return pipeline([build].concat(builds));
 			},
-			last: function() {
-				return builds[builds.length-1];
+			first: function() {
+				return builds[0];
 			}
 		}
 	}
@@ -43,26 +43,22 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 
 	function addBuildToPipeline(pipeline, buildId) {
 		return getBuildInformation(buildId)
-				.then(pipeline.add)
+				.then(pipeline.insertAtFront)
 				.then(function(newPipeline) {
-					var lastBuild = newPipeline.last();
+					var lastBuild = newPipeline.first();
 					if (lastBuild["snapshot-dependencies"] && lastBuild["snapshot-dependencies"].build.length > 0)
 						return addBuildToPipeline(newPipeline, getDependent(lastBuild))
 					return newPipeline;
 				});
-
 	}
 
-	function loadPipeline(build) {
-		return addBuildToPipeline(pipeline([]), build.id)
-				.then(function(pipeline) {
-					return pipeline.builds;
-				});
+	function loadPipeline(builds) {
+		return addBuildToPipeline(pipeline([]), builds[0].id);
 	}
 
 	function builds(screen) {
-		return function(build) {
-			return loadPipeline(build).then(screen.add)
+		return function(builds) {
+			return loadPipeline(builds).then(screen.add)
 		}
 	}
 
@@ -70,8 +66,8 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	return getAllBuildSummaries()
 				.then(builds(screen))
 				.then(function(screen) {
-					console.log(screen.pipelines);
-					return screen.pipelines;
+					var builds = screen.pipelines.map(q => q.builds);
+					return builds;
 				});
 }
 
