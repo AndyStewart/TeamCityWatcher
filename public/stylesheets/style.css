@@ -15,10 +15,13 @@ h1 {
     margin: 10px;
 }
 
-.build {
+.build-step {
 	padding: 10px;
 	display:table-cell;
-	border-spacing: 10px;
+}
+
+.build-result {
+	padding: 10px;
 	color: #FFFFFF;
 }
 

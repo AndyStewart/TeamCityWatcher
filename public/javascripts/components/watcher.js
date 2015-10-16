@@ -31,7 +31,7 @@ var Build = React.createClass({
 	    });
   	},
   	render: function() {
-		var classes = "build " + this.state.status;
+		var classes = "build-result " + this.state.status;
 	    return <div className={classes}>
 				<h2>{this.state.name}: {this.state.id} </h2>
 				{this.state.statusText}
@@ -41,7 +41,7 @@ var Build = React.createClass({
 
 function renderPipeline(pipeline) {
 	return pipeline.map(function(build) {
-		return <Build build={build}/>;
+		return <div className="build-step"><Build build={build}/></div>;
 	})
 }
 

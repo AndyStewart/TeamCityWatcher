@@ -31,7 +31,7 @@ var Build = React.createClass({displayName: "Build",
 	    });
   	},
   	render: function() {
-		var classes = "build " + this.state.status;
+		var classes = "build-result " + this.state.status;
 	    return React.createElement("div", {className: classes}, 
 				React.createElement("h2", null, this.state.name, ": ", this.state.id, " "), 
 				this.state.statusText
@@ -41,7 +41,7 @@ var Build = React.createClass({displayName: "Build",
 
 function renderPipeline(pipeline) {
 	return pipeline.map(function(build) {
-		return React.createElement(Build, {build: build});
+		return React.createElement("div", {className: "build-step"}, React.createElement(Build, {build: build}));
 	})
 }
 
