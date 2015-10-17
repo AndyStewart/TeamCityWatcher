@@ -14,48 +14,65 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	}
 
 	function pipeline(builds) {
-		return {
-			builds: builds,
-			insertAtFront: build => pipeline([build].concat(builds)),
-			first: () =>  builds[0],
-			contains: id =>  builds.some(b => b.id == id)
-		}
+		return { builds: builds }
 	}
 
 	function buildScreen(pipelines) {
-		return {
-			pipelines: pipelines,
-			add: pipeline => buildScreen(pipelines.concat(pipeline)),
-			contains: id => pipelines.some(p => p.contains(id))
-		};
+		return { pipelines: pipelines };
 	}
 
-	function getDependent(build) {
-		return build["snapshot-dependencies"].build[0].id;
+	function addToScreen(screen) {
+		return pipeline => buildScreen(screen.pipelines.concat(pipeline));
 	}
 
-	function addBuildToPipeline(pipeline, buildId) {
+	function screenContainsBuild(screen, id) {
+		return screen.pipelines.some(p => pipelineContainsBuild(p, id));
+	}
+
+	function pipelineContainsBuild(pipeline, id) {
+		return pipeline.builds.some(b => b.id == id)
+	}
+
+	function getSnapshotDependency(build) {
+		return build["snapshot-dependencies"];
+	}
+
+	function first(collection) {
+		return collection[0];
+	}
+
+	function loadDependentBuild(newPipeline) {
+		var dependency = getSnapshotDependency(first(newPipeline.builds));
+		if (dependency && dependency.build.length > 0)
+			return addBuildToPipeline(newPipeline, first(dependency.build).id)
+		return newPipeline;
+	}
+
+	function addBuildToPipeline(pipeline1, buildId) {
 		return getBuildInformation(buildId)
-				.then(pipeline.insertAtFront)
-				.then(newPipeline => {
-					var lastBuild = newPipeline.first();
-					if (lastBuild["snapshot-dependencies"] && lastBuild["snapshot-dependencies"].build.length > 0)
-						return addBuildToPipeline(newPipeline, getDependent(lastBuild))
-					return newPipeline;
-				});
+				.then(build => pipeline([build].concat(pipeline1.builds)))
+				.then(loadDependentBuild);
+	}
+
+	function isEmpty(collection) {
+		return collection.length == 0;
+	}
+
+	function screenIsFull(screen) {
+		return screen.pipelines.length == 5;
 	}
 
 	function addPipelineToScreen(screen, builds) {
-		if (builds.length == 0 || screen.pipelines.length == 5) {
+		if (isEmpty(builds) || screenIsFull(screen)) {
 			return screen;
 		}
 
 		var buildToAdd = builds[0].id;
-		if (screen.contains(buildToAdd))
+		if (screenContainsBuild(screen, buildToAdd))
 			return addPipelineToScreen(screen, builds.slice(1));
 
 		return addBuildToPipeline(pipeline([]), buildToAdd)
-					.then(screen.add)
+					.then(addToScreen(screen))
 					.then(function(newScreen) {
 							if (builds.length > 1) {
 								return addPipelineToScreen(newScreen, builds.slice(1));
@@ -68,14 +85,10 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 		return builds => addPipelineToScreen(screen, builds);
 	}
 
-	function convertScreenToResponse(screen) {
-		return screen.pipelines.map(q => q.builds);
-	}
-
 	var emptyScreen = buildScreen([]);
 	return getAllBuildSummaries()
 				.then(addBuildsToScreen(emptyScreen))
-				.then(convertScreenToResponse);
+				.then(screen => screen.pipelines.map(q => q.builds));
 }
 
 module.exports = { information: information, pipelines: pipelines }
