@@ -9,9 +9,7 @@ function information(id, buildInformation) {
 
 function pipelines(getBuildSummaries, getBuildInformation) {
 
-	function getAllBuildSummaries() {
-		return getBuildSummaries().then(r => r.build);
-	}
+	var getAllBuildSummaries = () => getBuildSummaries().then(r => r.build);
 
 	function pipeline(builds) {
 		return { builds: builds }
@@ -25,21 +23,9 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 		return pipeline => buildScreen(screen.pipelines.concat(pipeline));
 	}
 
-	function screenContainsBuild(screen, id) {
-		return screen.pipelines.some(p => pipelineContainsBuild(p, id));
-	}
-
-	function pipelineContainsBuild(pipeline, id) {
-		return pipeline.builds.some(b => b.id == id)
-	}
-
-	function getSnapshotDependency(build) {
-		return build["snapshot-dependencies"];
-	}
-
-	function first(collection) {
-		return collection[0];
-	}
+	var screenContainsBuild = (screen, id) => screen.pipelines.some(p => pipelineContainsBuild(p, id));
+	var pipelineContainsBuild = (pipeline, id) => pipeline.builds.some(b => b.id == id);
+	var getSnapshotDependency = build => build["snapshot-dependencies"];
 
 	function loadDependentBuild(newPipeline) {
 		var dependency = getSnapshotDependency(first(newPipeline.builds));
@@ -54,13 +40,9 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 				.then(loadDependentBuild);
 	}
 
-	function isEmpty(collection) {
-		return collection.length == 0;
-	}
-
-	function screenIsFull(screen) {
-		return screen.pipelines.length == 5;
-	}
+	var first = col => col[0];
+	var isEmpty = collection => collection.length == 0;
+	var screenIsFull = screen => screen.pipelines.length == 5;
 
 	function addPipelineToScreen(screen, builds) {
 		if (isEmpty(builds) || screenIsFull(screen)) {
@@ -81,14 +63,13 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 						});
 	}
 
-	function addBuildsToScreen(screen) {
-		return builds => addPipelineToScreen(screen, builds);
-	}
+	var convertToResponse = screen => screen.pipelines.map(q => q.builds);
+	var emptyScreen = buildScreen.bind(null, []);
+	var addBuildsToEmptyScreen = addPipelineToScreen.bind(null, emptyScreen());
 
-	var emptyScreen = buildScreen([]);
 	return getAllBuildSummaries()
-				.then(addBuildsToScreen(emptyScreen))
-				.then(screen => screen.pipelines.map(q => q.builds));
+				.then(addBuildsToEmptyScreen)
+				.then(convertToResponse);
 }
 
 module.exports = { information: information, pipelines: pipelines }
