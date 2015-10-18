@@ -19,22 +19,15 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 		return { pipelines: pipelines };
 	}
 
-	function addToScreen(screen) {
-		return pipeline => buildScreen(screen.pipelines.concat(pipeline));
-	}
-
-	var screenContainsBuild = (screen, id) => screen.pipelines.some(p => pipelineContainsBuild(p, id));
-	var pipelineContainsBuild = (pipeline, id) => pipeline.builds.some(b => b.id == id);
-	var getSnapshotDependency = build => build["snapshot-dependencies"];
-
-	function loadDependentBuild(newPipeline) {
-		var dependency = getSnapshotDependency(first(newPipeline.builds));
-		if (dependency && dependency.build.length > 0)
-			return addBuildToPipeline(newPipeline, first(dependency.build).id)
-		return newPipeline;
-	}
-
 	function addBuildToPipeline(pipeline1, buildId) {
+		function loadDependentBuild(newPipeline) {
+			var getSnapshotDependency = build => build["snapshot-dependencies"];
+			var dependency = getSnapshotDependency(first(newPipeline.builds));
+			if (dependency && dependency.build.length > 0)
+				return addBuildToPipeline(newPipeline, first(dependency.build).id)
+			return newPipeline;
+		}
+
 		return getBuildInformation(buildId)
 				.then(build => pipeline([build].concat(pipeline1.builds)))
 				.then(loadDependentBuild);
@@ -49,11 +42,17 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 			return screen;
 		}
 
-		var buildToAdd = builds[0].id;
-		if (screenContainsBuild(screen, buildToAdd))
+		var buildsId = builds[0].id;
+		var pipelineContainsBuild = (pipeline, id) => pipeline.builds.some(b => b.id == id);
+		var screenContainsBuild = (screen, id) => screen.pipelines.some(p => pipelineContainsBuild(p, id));
+		if (screenContainsBuild(screen, buildsId))
 			return addPipelineToScreen(screen, builds.slice(1));
 
-		return addBuildToPipeline(pipeline([]), buildToAdd)
+		function addToScreen(screen) {
+			return pipeline => buildScreen(screen.pipelines.concat(pipeline));
+		}
+
+		return addBuildToPipeline(pipeline([]), buildsId)
 					.then(addToScreen(screen))
 					.then(function(newScreen) {
 							if (builds.length > 1) {
