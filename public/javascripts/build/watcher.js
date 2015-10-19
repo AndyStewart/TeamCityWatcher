@@ -33,21 +33,27 @@ var Build = React.createClass({displayName: "Build",
   	render: function() {
 		var classes = "build-result " + this.state.status;
 	    return React.createElement("div", {className: classes}, 
-				React.createElement("h2", null, this.state.name, ": ", this.state.id, " "), 
-				this.state.statusText
+				React.createElement("h2", null, this.state.name, ":  "), 
+				this.state.statusText, 
+				React.createElement("div", {className: "buildNumber"}, "#", this.state.id)
 		   );
   	}
 });
 
 function renderPipeline(pipeline) {
-	return pipeline.map(function(build) {
+	return pipeline.builds.map(function(build) {
 		return React.createElement("div", {className: "build-step"}, React.createElement(Build, {build: build}));
 	})
 }
 
 function loadPipelines(pipelines) {
 	return pipelines.map(function(pipeline) {
-		return React.createElement("div", {className: "pipeline"}, renderPipeline(pipeline));
+		return React.createElement("div", null, 
+					React.createElement("h2", null, "Branch: ", pipeline.branchName), 
+					React.createElement("div", {className: "pipeline"}, 
+						renderPipeline(pipeline)
+					)
+				);
 	})
 }
 

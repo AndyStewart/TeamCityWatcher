@@ -14,7 +14,18 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	}
 
 	function pipeline(builds) {
+		var branchName = 'Unknown';
+		var startDate = 'Unknown';
+		var finishDate = 'Unknown';
+		if (builds.length > 0) {
+			branchName = builds[0].branchName;
+			startDate = builds[0].startDate;
+			finishDate = builds[0].finishDate;
+		}
 		return {
+			branchName: branchName,
+			startDate: startDate,
+			finishDate: finishDate,
 			builds: builds,
 			insertAtFront: build => pipeline([build].concat(builds)),
 			first: () =>  builds[0],
@@ -69,7 +80,7 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 	}
 
 	function convertScreenToResponse(screen) {
-		return screen.pipelines.map(q => q.builds);
+		return screen.pipelines;
 	}
 
 	var emptyScreen = buildScreen([]);

@@ -25,9 +25,10 @@ function buildInformation(buildId, builds)
 					id: 1,
 					name: 'Build Name'
 				},
+				"branchName": "master",
 				"statusText": 'Failed Broken tests',
 				"startDate": "20151008T180742+0100",
-					"finishDate": "20151008T180751+0100",
+				"finishDate": "20151008T180751+0100",
 					"snapshot-dependencies": {
 				    "count": 1,
 				    "build": builds,
@@ -104,7 +105,7 @@ describe('Generating a pipeline with builds relate to each other by snapshot dep
 	it("Pipeline contains 3 builds", function(done) {
 		builds.pipelines(getLatestBuilds, getBuildInfo)
 			.then(function(results) {
-				results[0].length.should.equal(4);
+				results[0].builds.length.should.equal(4);
 				done();
 			});
 	});
@@ -137,6 +138,14 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 						    	});
 		}
 
+		it("Pipeline has a branch name", function(done) {
+			builds.pipelines(getLatestBuilds, getBuildInfo)
+				.then(function(results) {
+					results[0].branchName.should.equal('master');
+					done();
+				});
+		});
+
 		it("Returns five pipelines", function(done) {
 			builds.pipelines(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
@@ -148,9 +157,9 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 		it("Each pipeline contains 1 build", function(done) {
 			builds.pipelines(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
-					results[0].length.should.equal(1);
-					results[1].length.should.equal(1);
-					results[2].length.should.equal(1);
+					results[0].builds.length.should.equal(1);
+					results[1].builds.length.should.equal(1);
+					results[2].builds.length.should.equal(1);
 					done();
 				});
 		});
@@ -158,9 +167,9 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 		it("Build has an id", function(done) {
 			builds.pipelines(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
-					results[0][0].id.should.equal(1);
-					results[1][0].id.should.equal(2);
-					results[2][0].id.should.equal(3);
+					results[0].builds[0].id.should.equal(1);
+					results[1].builds[0].id.should.equal(2);
+					results[2].builds[0].id.should.equal(3);
 					done();
 				});
 		});

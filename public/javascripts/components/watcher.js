@@ -33,21 +33,27 @@ var Build = React.createClass({
   	render: function() {
 		var classes = "build-result " + this.state.status;
 	    return <div className={classes}>
-				<h2>{this.state.name}: {this.state.id} </h2>
+				<h2>{this.state.name}:  </h2>
 				{this.state.statusText}
+				<div className="buildNumber">#{this.state.id}</div>
 		   </div>;
   	}
 });
 
 function renderPipeline(pipeline) {
-	return pipeline.map(function(build) {
+	return pipeline.builds.map(function(build) {
 		return <div className="build-step"><Build build={build}/></div>;
 	})
 }
 
 function loadPipelines(pipelines) {
 	return pipelines.map(function(pipeline) {
-		return <div className="pipeline">{renderPipeline(pipeline)}</div>;
+		return <div>
+					<h2>Branch: {pipeline.branchName}</h2>
+					<div className="pipeline">
+						{renderPipeline(pipeline)}
+					</div>
+				</div>;
 	})
 }
 

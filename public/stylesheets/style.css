@@ -8,11 +8,22 @@ h1 {
 	text-align: center;
 }
 
+h2 {
+	color: #FFFFFF;
+	margin: 0px;
+	padding: 0px;
+    margin-left: 10px;
+}
+
+.buildNumber {
+	text-align: right;
+}
+
 .pipeline {
     display:table;
     width:100%;
     table-layout:fixed;
-    margin: 10px;
+    margin: 0px;
 }
 
 .build-step {
@@ -23,6 +34,7 @@ h1 {
 .build-result {
 	padding: 10px;
 	color: #FFFFFF;
+	height: 100px;
 }
 
 .SUCCESS {
