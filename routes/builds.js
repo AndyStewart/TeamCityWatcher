@@ -5,7 +5,7 @@ var builds = require('../app/queries/builds');
 var teamcity = require('../app/adapters/teamcity');
 
 router.get('/', function(req, res) {
-	builds.pipelines(teamcity.builds, teamcity.information)
+	builds.generateBuildScreen(teamcity.builds, teamcity.information)
 		  .then(data => res.send(data));
 });
 

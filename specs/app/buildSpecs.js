@@ -95,7 +95,7 @@ describe('Generating a pipeline with builds relate to each other by snapshot dep
 	}
 
 	it("Should have 1 pipeline", function(done) {
-			builds.pipelines(getLatestBuilds, getBuildInfo)
+			builds.generateBuildScreen(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
 					results.length.should.equal(1);
 					done();
@@ -103,7 +103,7 @@ describe('Generating a pipeline with builds relate to each other by snapshot dep
 		});
 
 	it("Pipeline contains 3 builds", function(done) {
-		builds.pipelines(getLatestBuilds, getBuildInfo)
+		builds.generateBuildScreen(getLatestBuilds, getBuildInfo)
 			.then(function(results) {
 				results[0].builds.length.should.equal(4);
 				done();
@@ -139,7 +139,7 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 		}
 
 		it("Pipeline has a branch name", function(done) {
-			builds.pipelines(getLatestBuilds, getBuildInfo)
+			builds.generateBuildScreen(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
 					results[0].branchName.should.equal('master');
 					done();
@@ -147,7 +147,7 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 		});
 
 		it("Returns five pipelines", function(done) {
-			builds.pipelines(getLatestBuilds, getBuildInfo)
+			builds.generateBuildScreen(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
 					results.length.should.equal(5);
 					done();
@@ -155,7 +155,7 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 		});
 
 		it("Each pipeline contains 1 build", function(done) {
-			builds.pipelines(getLatestBuilds, getBuildInfo)
+			builds.generateBuildScreen(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
 					results[0].builds.length.should.equal(1);
 					results[1].builds.length.should.equal(1);
@@ -165,7 +165,7 @@ describe('Generating a pipeline with where each pipeline contans one build', fun
 		});
 
 		it("Build has an id", function(done) {
-			builds.pipelines(getLatestBuilds, getBuildInfo)
+			builds.generateBuildScreen(getLatestBuilds, getBuildInfo)
 				.then(function(results) {
 					results[0].builds[0].id.should.equal(1);
 					results[1].builds[0].id.should.equal(2);

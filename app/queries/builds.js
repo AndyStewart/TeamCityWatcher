@@ -7,36 +7,31 @@ function information(id, buildInformation) {
 	return buildInformation(id).then(convertToBuildInformation);
 }
 
-function pipelines(getBuildSummaries, getBuildInformation) {
+function generateBuildScreen(getBuildSummaries, getBuildInformation) {
 
 	function getAllBuildSummaries() {
 		return getBuildSummaries().then(r => r.build);
 	}
 
-	function pipeline(builds) {
-		var branchName = 'Unknown';
-		var startDate = 'Unknown';
-		var finishDate = 'Unknown';
-		if (builds.length > 0) {
-			branchName = builds[0].branchName;
-			startDate = builds[0].startDate;
-			finishDate = builds[0].finishDate;
-		}
+	function newPipeline(builds) {
+		var build = (builds.length > 0) 
+						? builds[0]
+						: { branchName: 'Unknown', startDate: 'Unknown', finishDate: 'Unknown' };
 		return {
-			branchName: branchName,
-			startDate: startDate,
-			finishDate: finishDate,
+			branchName: build.branchName,
+			startDate: build.startDate,
+			finishDate: build.finishDate,
 			builds: builds,
-			insertAtFront: build => pipeline([build].concat(builds)),
-			first: () =>  builds[0],
+			insertAtFront: build => newPipeline([build].concat(builds)),
+			first: () =>  build,
 			contains: id =>  builds.some(b => b.id == id)
 		}
 	}
 
-	function buildScreen(pipelines) {
+	function newBuildScreen(pipelines) {
 		return {
 			pipelines: pipelines,
-			add: pipeline => buildScreen(pipelines.concat(pipeline)),
+			add: pipeline => newBuildScreen(pipelines.concat(pipeline)),
 			contains: id => pipelines.some(p => p.contains(id))
 		};
 	}
@@ -65,7 +60,7 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 		if (screen.contains(buildToAdd))
 			return addPipelineToScreen(screen, builds.slice(1));
 
-		return addBuildToPipeline(pipeline([]), buildToAdd)
+		return addBuildToPipeline(newPipeline([]), buildToAdd)
 					.then(screen.add)
 					.then(function(newScreen) {
 							if (builds.length > 1) {
@@ -83,10 +78,10 @@ function pipelines(getBuildSummaries, getBuildInformation) {
 		return screen.pipelines;
 	}
 
-	var emptyScreen = buildScreen([]);
+	var emptyScreen = newBuildScreen([]);
 	return getAllBuildSummaries()
 				.then(addBuildsToScreen(emptyScreen))
 				.then(convertScreenToResponse);
 }
 
-module.exports = { information: information, pipelines: pipelines }
+module.exports = { information: information, generateBuildScreen: generateBuildScreen }
